@@ -124,100 +124,16 @@ public class Player extends Item{
      */
     @Override
     public void tick() {   
-            //Up movement
-            if(game.getKeyManager().up){
-                 game.getKeyManager().keyCheck(KeyEvent.VK_UP, false);
-                 setMovement(1);
-               if(!dir[0]){
-                     setSpeed(getSpeed()-1);
-                      
-                      if(getSpeed() == 0){
-                        setSpeed(1);
-                        dir[0] = true;
-                       }
-                }else{
-                   setSpeed(getSpeed()+1); 
-                }
-                 //sets the other directions to false
-                 dir[1] = false;
-                 dir[2] = false;
-                 dir[3] = false;
-            }
-            //Down movement
-            if(game.getKeyManager().down){
-                game.getKeyManager().keyCheck(KeyEvent.VK_DOWN, false);
-                setMovement(2);
-               if(!dir[1]){
-                     setSpeed(getSpeed()-1);
-                      
-                      if(getSpeed() == 0){
-                        setSpeed(1);
-                        dir[1] = true;
-                       }
-                }else{
-                   setSpeed(getSpeed()+1); 
-                }
-                //sets the other directions to false
-                 dir[0] = false;
-                 dir[2] = false;
-                 dir[3] = false;
-            }
+       
             //Left Movement
             if(game.getKeyManager().left){
-                game.getKeyManager().keyCheck(KeyEvent.VK_LEFT, false);
-                setMovement(3);
-                if(!dir[2]){
-                     setSpeed(getSpeed()-1);
-                      
-                      if(getSpeed() == 0){
-                        setSpeed(1);
-                        dir[2] = true;
-                       }
-                }else{
-                   setSpeed(getSpeed()+1); 
-                }
-                //sets the other directions to false
-                 dir[0] = false;
-                 dir[1] = false;
-                 dir[3] = false;
+                setSpeed(getSpeed()-1);
             }
             //Right movement
             if(game.getKeyManager().right){
-                game.getKeyManager().keyCheck(KeyEvent.VK_RIGHT, false);
-                setMovement(4);
-                if(!dir[3]){
-                     setSpeed(getSpeed()-1);
-                      
-                      if(getSpeed() == 0){
-                        setSpeed(1);
-                        dir[3] = true;
-                       }
-                }else{
                    setSpeed(getSpeed()+1); 
-                }
-                //sets the other directions to false
-                 dir[0] = false;
-                 dir[1] = false;
-                 dir[2] = false;   
-
             }
            
-         setSpeed(getSpeed());
-         //Movement decider
-         switch(getMovement()){
-             case 1:
-                  setY(getY() - getSpeed());
-                 break;
-             case 2:
-                 setY(getY() + getSpeed());
-                 break;
-             case 3:
-                  setX(getX() - getSpeed());
-                 break;
-             case 4:
-                 setX(getX() + getSpeed());
-                 break;
-         }
          //Colissions
       if(getX() + 60 >= game.getWidth()){
           setX(game.getWidth() - 60);
@@ -246,17 +162,6 @@ public class Player extends Item{
      */
     @Override
     public void render(Graphics g) {
-        counter++;
-        
-        //Checks if player has collided
-        if(collided){
-            g.drawImage(Assets.planetTwo,getX(), getY(), getWidth(), getHeight(), null);
-        }else{
-            g.drawImage(Assets.planetOne,getX(), getY(), getWidth(), getHeight(), null);
-        }
-        if(counter > 260 && collided){
-            setCollided(false);
-            counter=0;
-        }
+            g.drawImage(Assets.hank,getX(), getY(), getWidth(), getHeight(), null);
     }
 }

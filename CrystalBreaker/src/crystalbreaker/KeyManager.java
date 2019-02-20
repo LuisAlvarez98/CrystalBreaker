@@ -40,7 +40,7 @@ public class KeyManager implements KeyListener{
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        //keys[e.getKeyCode()] = false;
+        keys[e.getKeyCode()] = true;
     }
     /**
      * keyReleased method
@@ -48,16 +48,9 @@ public class KeyManager implements KeyListener{
      */
     @Override
     public void keyReleased(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
+        keys[e.getKeyCode()] = false;
     }
-    /**
-     * Sets a boolean to the key array
-     * @param key
-     * @param checker 
-     */
-    public void keyCheck(int key, boolean checker){
-        keys[key] = checker;
-    }
+
     /**
      * to enable or disable moves on every tick
      */
