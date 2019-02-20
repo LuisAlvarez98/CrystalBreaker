@@ -3,6 +3,7 @@ package crystalbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 /**
  * Game Class
@@ -21,7 +22,7 @@ public class Game implements Runnable{
     
     private int x;
     private int direction;
-    private Player player;
+    private ArrayList<Bar> bars;
     private KeyManager keyManager;
     
     /**
@@ -36,6 +37,7 @@ public class Game implements Runnable{
         this.height = height;
         running = false;
         keyManager = new KeyManager();
+        bars = new ArrayList<Bar>();
     }
     /**
      * getHeight method
@@ -57,7 +59,11 @@ public class Game implements Runnable{
     public void init(){
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(getWidth()/2,getHeight()/2, 1, 100, 100, this);
+        for(int i = 0; i < 40; i++){
+            for(int j = 0 ;j < 4; j++){
+                bars.add(new Bar(10 + i*120 ,10 + j *60 ,100,100,this));
+            }
+        }
         display.getJframe().addKeyListener(keyManager);
     }
     /**
@@ -97,7 +103,6 @@ public class Game implements Runnable{
      */
     private void tick(){
        keyManager.tick();
-       player.tick();
     }
     /**
      * render method
@@ -109,7 +114,11 @@ public class Game implements Runnable{
         }else{
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background,0,0,width,height,null);
-            player.render(g);
+              for(int i = 0; i < 40; i++){
+            for(int j = 0 ;j < 4; j++){
+                     bars.get(i).render(g);
+            }
+        }
             bs.show();
             g.dispose();
         }
