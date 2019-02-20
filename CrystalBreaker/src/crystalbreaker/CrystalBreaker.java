@@ -16,6 +16,8 @@ public class CrystalBreaker {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Game g = new Game("Crystal Breaker",1080,800);
+        g.start();
     }
     
 }
