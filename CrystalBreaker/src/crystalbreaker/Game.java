@@ -113,8 +113,8 @@ public class Game implements Runnable {
      * tick method
      */
     private void tick() {
-        player.tick();
         keyManager.tick();
+        player.tick();
     }
 
     /**

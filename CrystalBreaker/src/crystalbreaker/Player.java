@@ -1,33 +1,31 @@
 package crystalbreaker;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
+import java.awt.Rectangle;
 
 /**
- *  Player class
- * @author Luis Felipe Alvarez Sanchez A01194173
- *  4 Feb 2019
+ * Player Class
+ *
+ * @author Luis Felipe Alvarez Sanchez A01194173 12 Feb 2019
  */
-public class Player extends Item{
+public class Player extends Item {
+
+    //Instance variables
     private int direction;
     private int width;
     private int height;
     private Game game;
-    private int speed;
-    private int movement;
-    
-    private boolean collided;    
-    private int counter;
-    
-    public boolean dir[] ={false,false,false,false};
+    private int lives;
+
     /**
      * Player constructor
+     *
      * @param x
      * @param y
      * @param direction
      * @param width
      * @param height
-     * @param game 
+     * @param game
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
@@ -35,133 +33,112 @@ public class Player extends Item{
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 1;
-        this.collided = false;
-        this.counter = 0;
-        this.movement = 1;
-    }
-    /**
-     * setSpeed method
-     * @param speed 
-     */
-      public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-    /**
-     * getSpeed method
-     * @return speed
-     */
-    public int getSpeed() {
-        return speed;
-    }
-    /**
-     * getMovement method
-     * @return movement
-     */
-    public int getMovement() {
-        return movement;
-    }
-    /**
-     * setMovement method
-     * @param movement 
-     */
-    public void setMovement(int movement) {
-        this.movement = movement;
+        this.lives = lives;
     }
 
     /**
-     * setCollided method
-     * @param collided 
+     * decreases the player lives by one
      */
-    public void setCollided(boolean collided) {
-        this.collided = collided;
+    public void decreasePlayerLive() {
+        this.lives--;
     }
+
+    /**
+     * getLives method
+     *
+     * @return lives
+     */
+    public int getLives() {
+        return this.lives;
+    }
+
     /**
      * getDirection method
-     * @return direction 
+     *
+     * @return direction
      */
     public int getDirection() {
         return direction;
     }
-    /**
-     * setDirection method
-     * @param direction 
-     */
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-    /**
-     * getHeight method
-     * @return height
-     */
-    public int getHeight() {
-        return height;
-    }
+
     /**
      * getWidth method
+     *
      * @return width
      */
     public int getWidth() {
         return width;
     }
+
     /**
-     * setHeight method
-     * @param height 
+     * getHeight method
+     *
+     * @return height
      */
-    public void setHeight(int height) {
-        this.height = height;
+    public int getHeight() {
+        return height;
     }
+
+    /**
+     * setDirection method
+     *
+     * @param direction
+     */
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
     /**
      * setWidth method
-     * @param width 
+     *
+     * @param width
      */
     public void setWidth(int width) {
         this.width = width;
     }
+
     /**
-     * tick method
-     * The overall movement of the player
+     * setHeight method
+     *
+     * @param height
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * tick method overall movement of the player
      */
     @Override
-    public void tick() {   
+    public void tick() {
+        // vertical left up
+        if (game.getKeyManager().left) {
+            setX(getX() - 10);
+        }
+        // vertical left down
+        if (game.getKeyManager().right) {
+            setX(getX() + 10);
+        }
        
-            //Left Movement
-            if(game.getKeyManager().left){
-                setSpeed(getSpeed()-1);
-            }
-            //Right movement
-            if(game.getKeyManager().right){
-                   setSpeed(getSpeed()+1); 
-            }
-           
-         //Colissions
-      if(getX() + 60 >= game.getWidth()){
-          setX(game.getWidth() - 60);
-          setMovement(3);
-          setCollided(true);
-      }
-      else if(getX() <= -30){
-           setX(-30);
-           setMovement(4);
-           setCollided(true);
-      }
-      if(getY() + 100 >= game.getHeight()){
-          setY(game.getHeight() - 100);
-           setMovement(1);
-           setCollided(true);
-      }
-      else if(getY() <= -30){
-          setY(-30);
-          setMovement(2);
-          setCollided(true);
-      }
+        // reset x position and y position if colision
+        if (getX() + 200 >= game.getWidth()) {
+            setX(game.getWidth() - 200);
+        } else if (getX() <= -5) {
+            setX(-5);
+        }
+      
     }
+
+
+
     /**
-     * Renders the player
-     * @param g 
+     * render method
+     *
+     * @param g
      */
     @Override
     public void render(Graphics g) {
-            g.drawImage(Assets.hank,getX(), getY(), getWidth(), getHeight(), null);
+        //draws the player
+        g.drawImage(Assets.hank, getX(), getY(), getWidth(), getHeight(), null);
     }
 }
