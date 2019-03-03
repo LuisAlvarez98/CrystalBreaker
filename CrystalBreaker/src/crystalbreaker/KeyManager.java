@@ -19,6 +19,8 @@ public class KeyManager implements KeyListener{
     public boolean down;
     public boolean left;
     public boolean right;
+    public boolean space;
+    public boolean pause;
     
     private boolean keys[]; // to store all the flags for every key
     /**
@@ -49,8 +51,8 @@ public class KeyManager implements KeyListener{
         // set false to every key released
         keys[e.getKeyCode()] = false;
     }
-    
 
+    
     /**
      * to enable or disable moves on every tick
      */
@@ -59,6 +61,8 @@ public class KeyManager implements KeyListener{
         down = keys[KeyEvent.VK_DOWN];
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
+        space = keys[KeyEvent.VK_SPACE];
+        pause = keys[KeyEvent.VK_P];
     }
 }
 

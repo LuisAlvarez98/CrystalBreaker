@@ -3,6 +3,7 @@ package crystalbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import static java.lang.System.console;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +24,7 @@ public class Game implements Runnable {
 
     private ArrayList<Bar> bars;
     private Player player;
+    private Bullet bullet;
     private KeyManager keyManager;
 
     /**
@@ -66,6 +68,7 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         player = new Player(getWidth()/2 - 150, getHeight() - 200, 1, 200, 200, this);
+        bullet = new Bullet(getWidth()/2 - 90, getHeight() - 250, 64, 64, this);
         for (int i = 0; i < 40; i++) {
             for (int j = 0; j < 4; j++) {
                 bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
@@ -86,11 +89,11 @@ public class Game implements Runnable {
         long now;
         long lastTime = System.nanoTime();
         while (running) {
-            //Metodo statico
+            //Metodo estatico
             now = System.nanoTime();
             delta += (now - lastTime) / timeTick;
             lastTime = now;
-
+            
             if (delta >= 1) {
                 tick();
                 render();
@@ -114,7 +117,12 @@ public class Game implements Runnable {
      */
     private void tick() {
         keyManager.tick();
-        player.tick();
+        System.out.println(player.getPausedGame());
+        if(!player.getPausedGame()){
+            player.tick();
+            bullet.tick();
+        }
+        
     }
 
     /**
@@ -127,12 +135,21 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
+            player.render(g);   
+            bullet.render(g);
+            
+            
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     bars.get(i).render(g);
                 }
             }
+            /*rrayList bullets = player.getProjectiles();
+            for(int i = 0; i < bullets.size(); i++) {
+                Bullet bul = (Bullet) bullets.get(i);
+                g.setColor(Color.BLUE);
+                g.fillRect(bul.getX(), bul.getY(), 10, 5);
+            }*/
             bs.show();
             g.dispose();
         }
