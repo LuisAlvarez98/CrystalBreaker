@@ -62,7 +62,7 @@ public class KeyManager implements KeyListener{
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
-        pause = keys[KeyEvent.VK_P];
+        pause = keys[KeyEvent.VK_E];
     }
 }
 

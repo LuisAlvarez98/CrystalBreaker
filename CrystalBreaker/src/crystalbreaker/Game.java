@@ -21,6 +21,7 @@ public class Game implements Runnable {
     private int height;
     private Thread thread;
     private boolean running;
+    private boolean paused;
 
     private ArrayList<Bar> bars;
     private Player player;
@@ -39,6 +40,7 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
         running = false;
+        paused = false;
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
     }
@@ -116,13 +118,17 @@ public class Game implements Runnable {
      * tick method
      */
     private void tick() {
+        System.out.println(paused);
         keyManager.tick();
-        System.out.println(player.getPausedGame());
-        if(!player.getPausedGame()){
+        if(this.getKeyManager().pause && paused == false) {
+            paused = true;
+        } else if(paused == true && this.getKeyManager().pause) {
+            paused = false;
+          
+        } if(paused == false){
             player.tick();
             bullet.tick();
         }
-        
     }
 
     /**
@@ -144,12 +150,7 @@ public class Game implements Runnable {
                     bars.get(i).render(g);
                 }
             }
-            /*rrayList bullets = player.getProjectiles();
-            for(int i = 0; i < bullets.size(); i++) {
-                Bullet bul = (Bullet) bullets.get(i);
-                g.setColor(Color.BLUE);
-                g.fillRect(bul.getX(), bul.getY(), 10, 5);
-            }*/
+            
             bs.show();
             g.dispose();
         }

@@ -18,8 +18,6 @@ public class Player extends Item {
     private Game game;
     private Bullet bullet;
     private int lives;
-    private boolean paused;
-    private ArrayList<Bullet> bullets;
 
     /**
      * Player constructor
@@ -34,7 +32,6 @@ public class Player extends Item {
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
-        paused = false;
         this.direction = direction;
         this.width = width;
         this.height = height;
@@ -64,10 +61,6 @@ public class Player extends Item {
         return this.lives;
     }
     
-    public boolean getPausedGame() {
-        return paused;
-    }
-
     /**
      * getDirection method
      *
@@ -142,14 +135,6 @@ public class Player extends Item {
         } else if (getX() <= -5) {
             setX(-5);
         }
-        
-        if(game.getKeyManager().pause && paused == false){
-            paused = true;
-        }
-        if(game.getKeyManager().pause && paused == true){
-            paused = false;
-        }
-      
     }
 
 
