@@ -30,7 +30,7 @@ public class Player extends Item {
      * @param game
      * @param bullet
      */
-    public Player(int x, int y, int direction, int width, int height, Game game) {
+    public Player(int x, int y, int direction, int width, int height, Game game,int lives) {
         super(x, y);
         this.direction = direction;
         this.width = width;
@@ -50,6 +50,13 @@ public class Player extends Item {
      */
     public void decreasePlayerLive() {
         this.lives--;
+    }
+    /**
+     * setLives method
+     * @param lives 
+     */
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     /**
