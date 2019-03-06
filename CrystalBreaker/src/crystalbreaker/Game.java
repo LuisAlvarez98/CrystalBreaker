@@ -3,6 +3,12 @@ package crystalbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import static java.lang.System.console;
 import java.util.ArrayList;
 
@@ -30,6 +36,7 @@ public class Game implements Runnable {
 
     private boolean gameOver;
     private int score;
+    private boolean gameStart;
 
     /**
      * Game constructor
@@ -47,8 +54,17 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
         this.score = 0;
+        this.gameStart = false;
     }
 
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
+    
+    public boolean isGameStart() {
+        return gameStart;
+    }
+    
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
@@ -146,7 +162,91 @@ public class Game implements Runnable {
      */
     private void tick() {
         keyManager.tick();
-        if (!isGameOver()) {
+        //if save is clicked and is not gameover
+        if(!isGameStart()){
+            //1 to start game
+            if(getKeyManager().space){
+                setGameStart(true);
+            }else if(getKeyManager().load){
+                //load game
+                 // The name of the file to open.
+        String fileName = "gamesave.txt";
+
+        // This will reference one line at a time
+        String line = null;
+
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = 
+                new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+            ArrayList<String>values = new ArrayList<String>();
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+                values.add(line);
+            }   
+            
+            // Always close files.
+            for(int i = 0; i < values.size(); i++){
+                System.out.println(values.get(i));
+            }
+            setScore(Integer.parseInt(values.get(0)));
+            player.setLives(Integer.parseInt(values.get(1)));
+            bufferedReader.close();   
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Unable to open file '" + 
+                fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+            // Or we could just do this: 
+            // ex.printStackTrace();
+        }
+                System.out.println("Load");
+            }
+        }
+        if(getKeyManager().save && !isGameOver() && isGameStart()){
+            int count = 0;
+            if(count == 0){
+                count++;
+        // The name of the file to open.
+        String fileName = "gamesave.txt";
+
+        try {
+            // Assume default encoding.
+            FileWriter fileWriter =
+                new FileWriter(fileName);
+
+            // Always wrap FileWriter in BufferedWriter.
+            BufferedWriter bufferedWriter =
+                new BufferedWriter(fileWriter);
+            /**
+             * NEEDS TO SAVE SCORE LIVES POSITION AND BLOCKS POSITION
+             */
+            // saves score
+            bufferedWriter.write(Integer.toString(getScore())); 
+            bufferedWriter.newLine();
+            bufferedWriter.write(Integer.toString(player.getLives()));
+            // Always close files.
+            bufferedWriter.close();
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error writing to file '"
+                + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+            }
+        }
+        if (!isGameOver() && isGameStart()) {
             //System.out.println(paused);
             if (this.getKeyManager().pause && paused == false) {
                 paused = true;
