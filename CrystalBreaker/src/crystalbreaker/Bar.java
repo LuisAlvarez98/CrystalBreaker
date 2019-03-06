@@ -1,6 +1,7 @@
 package crystalbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 /**
@@ -62,6 +63,16 @@ public class Bar extends Item{
     @Override
     public void tick() {   
         
+    }
+     //Collisions
+    /**
+     * getPerimetro method
+     *
+     * @return rectangle
+     */
+    public Rectangle getPerimetro() {
+
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
     /**
      * Renders the player

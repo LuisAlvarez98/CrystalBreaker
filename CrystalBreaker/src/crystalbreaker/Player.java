@@ -2,6 +2,7 @@ package crystalbreaker;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /**
  * Player Class
@@ -15,6 +16,7 @@ public class Player extends Item {
     private int width;
     private int height;
     private Game game;
+    private Bullet bullet;
     private int lives;
 
     /**
@@ -26,6 +28,7 @@ public class Player extends Item {
      * @param width
      * @param height
      * @param game
+     * @param bullet
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
@@ -35,7 +38,13 @@ public class Player extends Item {
         this.game = game;
         this.lives = lives;
     }
-
+    /**
+     * implements shoot method
+     * 
+     */
+    public void shoot() { 
+     bullet.setShoot(true);
+    }
     /**
      * decreases the player lives by one
      */
@@ -51,7 +60,7 @@ public class Player extends Item {
     public int getLives() {
         return this.lives;
     }
-
+    
     /**
      * getDirection method
      *
@@ -126,11 +135,14 @@ public class Player extends Item {
         } else if (getX() <= -5) {
             setX(-5);
         }
-      
     }
-
-
-
+    /**
+     * Creates rectangle for the player
+     * @return 
+     */
+   public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight()-180);
+    }
     /**
      * render method
      *

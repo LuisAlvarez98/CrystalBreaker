@@ -3,6 +3,7 @@ package crystalbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import static java.lang.System.console;
 import java.util.ArrayList;
 
 /**
@@ -20,9 +21,11 @@ public class Game implements Runnable {
     private int height;
     private Thread thread;
     private boolean running;
+    private boolean paused;
 
     private ArrayList<Bar> bars;
     private Player player;
+    private Bullet bullet;
     private KeyManager keyManager;
 
     /**
@@ -37,6 +40,7 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
         running = false;
+        paused = false;
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
     }
@@ -66,6 +70,7 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         player = new Player(getWidth()/2 - 150, getHeight() - 200, 1, 200, 200, this);
+        bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
         for (int i = 0; i < 40; i++) {
             for (int j = 0; j < 4; j++) {
                 bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
@@ -86,11 +91,11 @@ public class Game implements Runnable {
         long now;
         long lastTime = System.nanoTime();
         while (running) {
-            //Metodo statico
+            //Metodo estatico
             now = System.nanoTime();
             delta += (now - lastTime) / timeTick;
             lastTime = now;
-
+            
             if (delta >= 1) {
                 tick();
                 render();
@@ -113,8 +118,39 @@ public class Game implements Runnable {
      * tick method
      */
     private void tick() {
-        keyManager.tick();
-        player.tick();
+        //System.out.println(paused);
+        if(this.getKeyManager().pause && paused == false) {
+            paused = true;
+             keyManager.tick();
+        } else if(paused == true && this.getKeyManager().pause) {
+            paused = false;
+          
+        } if(paused == false){
+            keyManager.tick();
+            player.tick();
+            //Pierde la bola
+            if(bullet.isDead()){
+                //Setea la bola en la posicion inicial
+                bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+                //setDeath false
+                bullet.setDead(false);
+            }
+            //Intersecta con el jugador
+            if(bullet.intersectaBarra(player)){
+                bullet.changeBulletByPlayerDirection();
+            }       
+            //Intersecta la ball con las barritas
+            for (int i = 0; i < 40; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if(bullet.intersecta(bars.get(i))){
+                        //Kill the bar
+                        bars.remove(i);
+                        bullet.changeDirection();
+                    }
+                }
+            }
+            bullet.tick();
+        }
     }
 
     /**
@@ -127,12 +163,15 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
+            player.render(g);   
+            bullet.render(g);
+            
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     bars.get(i).render(g);
                 }
             }
+            
             bs.show();
             g.dispose();
         }
