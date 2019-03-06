@@ -22,7 +22,7 @@ public class Bullet extends Item {
     private Player player;
     private Game game;
     private boolean dead;
-
+    private boolean hit;
     /**
      *
      * @param startX
@@ -40,6 +40,14 @@ public class Bullet extends Item {
         speedY = -10;
         speedX = 10;
         shoot = false;
+    }
+
+    public boolean isHit() {
+        return hit;
+    }
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
     }
     
     public int getX() {

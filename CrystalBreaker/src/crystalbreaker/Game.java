@@ -172,6 +172,7 @@ public class Game implements Runnable {
                 //Intersecta con el jugador
                 if (bullet.intersectaBarra(player)) {
                     bullet.changeBulletByPlayerDirection();
+                    bullet.setHit(false);
                 }
                 //Intersecta la ball con las barritas
                 for (int i = 0; i < 40; i++) {
@@ -179,8 +180,11 @@ public class Game implements Runnable {
                         if (bullet.intersecta(bars.get(i))) {
                             increaseScore();
                             //Kill the bar
-                            bars.remove(i);
-                            bullet.changeDirection();
+                            if(!bullet.isHit())   {
+                                bullet.setHit(true);
+                                bars.remove(i);
+                                bullet.changeDirection();
+                            }
                         }
                     }
                 }
