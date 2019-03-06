@@ -88,7 +88,7 @@ public class Bar extends Item{
      */
     public Rectangle getPerimetro() {
 
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), getWidth(), getHeight()- 50);
     }
     /**
      * Renders the player
@@ -96,13 +96,18 @@ public class Bar extends Item{
      */
     @Override
     public void render(Graphics g) {
-       g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-        /* switch(getHealth()) {
-            case 3: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-            case 2: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-            case 1: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-            case 0: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-            default: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
-        }*/
+       //g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+        switch(getHealth()) {
+            case 1:
+                g.drawImage(Assets.bar1,getX(), getY(), getWidth(), getHeight(), null);
+                break;
+            case 2:
+                g.drawImage(Assets.bar2,getX(), getY(), getWidth(), getHeight(), null);
+                break;
+            case 3:
+                g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+                break;
+        }
+        
     }
 }
