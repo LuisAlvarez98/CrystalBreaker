@@ -119,24 +119,27 @@ public class Game implements Runnable {
      */
     private void tick() {
         //System.out.println(paused);
-        keyManager.tick();
         if(this.getKeyManager().pause && paused == false) {
             paused = true;
+             keyManager.tick();
         } else if(paused == true && this.getKeyManager().pause) {
             paused = false;
           
         } if(paused == false){
-            
+            keyManager.tick();
             player.tick();
             //Pierde la bola
             if(bullet.isDead()){
+                //Setea la bola en la posicion inicial
                 bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+                //setDeath false
                 bullet.setDead(false);
             }
             //Intersecta con el jugador
             if(bullet.intersectaBarra(player)){
                 bullet.changeBulletByPlayerDirection();
             }       
+            //Intersecta la ball con las barritas
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     if(bullet.intersecta(bars.get(i))){
@@ -162,7 +165,6 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);   
             bullet.render(g);
-            
             
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
