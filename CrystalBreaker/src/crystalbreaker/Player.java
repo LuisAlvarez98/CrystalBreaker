@@ -136,9 +136,13 @@ public class Player extends Item {
             setX(-5);
         }
     }
-
-
-
+    /**
+     * Creates rectangle for the player
+     * @return 
+     */
+   public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight()-160);
+    }
     /**
      * render method
      *

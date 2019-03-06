@@ -6,6 +6,7 @@
 package crystalbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -20,6 +21,7 @@ public class Bullet extends Item {
     private int speedX;
     private Player player;
     private Game game;
+    private boolean dead;
 
     /**
      *
@@ -39,7 +41,7 @@ public class Bullet extends Item {
         speedX = 10;
         shoot = false;
     }
-
+    
     public int getX() {
         return x;
     }
@@ -103,6 +105,14 @@ public class Bullet extends Item {
         this.height = height;
     }
 
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
     /**
      * getPLayer method
      *
@@ -154,7 +164,9 @@ public class Bullet extends Item {
                 speedX = speedX * -1;
             }
             if(getY()  == game.getHeight()){
-                speedY = speedY * - 1;
+                //dead
+                setDead(true);
+                setShoot(false);
             }
             if(getY() <= -20){
                 speedY = speedY * -1;
@@ -165,9 +177,40 @@ public class Bullet extends Item {
             
         }
     }
+    /**
+     * 
+     * @return 
+     */
+   public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
 
+    /**
+     * @param obj
+     * @return
+     */
+    public boolean intersecta(Object obj) {
+        return obj instanceof Bar && getPerimetro().intersects(((Bar) obj).getPerimetro());
+    }
+    public boolean intersectaBarra(Object obj) {
+        return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
+    }
     public void render(Graphics g) {
         g.drawImage(Assets.bullet, getX(), getY(), getWidth(), getHeight(), null);
+    }
+    /**
+     * Change direction method
+     */
+    void changeDirection() {
+         speedX = speedX * -1;
+         speedY = speedY * - 1;
+    }
+    /**
+     * Change direction when hitted by player
+     */
+    void changeBulletByPlayerDirection() {
+           speedX = speedX * -1;
+         speedY = speedY * - 1;
     }
 
 }
