@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 public class Bar extends Item{
     private int width;
     private int height;
+    private int health;
     private Game game;
     
     /**
@@ -26,6 +27,7 @@ public class Bar extends Item{
         super(x, y);
         this.width = width;
         this.height = height;
+        health = 3;
         this.game = game;
     }
     /**
@@ -43,6 +45,13 @@ public class Bar extends Item{
         return width;
     }
     /**
+     * getHealth method
+     * @return health
+     */
+    public int getHealth() {
+        return health;
+    }
+    /**
      * setHeight method
      * @param height 
      */
@@ -55,6 +64,13 @@ public class Bar extends Item{
      */
     public void setWidth(int width) {
         this.width = width;
+    }
+    /**
+     * setHealth method
+     * @param health 
+     */
+    public void setHealth(int health) {
+        this.health = health;
     }
     /**
      * tick method
@@ -80,6 +96,13 @@ public class Bar extends Item{
      */
     @Override
     public void render(Graphics g) {
-            g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+       g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+        /* switch(getHealth()) {
+            case 3: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+            case 2: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+            case 1: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+            case 0: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+            default: g.drawImage(Assets.bar,getX(), getY(), getWidth(), getHeight(), null);
+        }*/
     }
 }
