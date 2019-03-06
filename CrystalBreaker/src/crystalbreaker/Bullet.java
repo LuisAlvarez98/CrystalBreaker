@@ -16,6 +16,7 @@ public class Bullet extends Item {
 
     private int width;
     private int height;
+    private int direction;
     private boolean shoot;
     private int speedY;
     private int speedX;
@@ -40,8 +41,33 @@ public class Bullet extends Item {
         speedY = -10;
         speedX = 10;
         shoot = false;
+        direction = (int) (Math.random() * 10 + 1);
     }
-    
+
+    public void bulletDirection(int numRand) {
+        if (numRand % 2 == 0) {
+            speedX *= -1;
+        }
+        if (getX() + 32 >= game.getWidth()) {
+            speedX = speedX * - 1;
+        }
+        if (getX() <= 0) {
+            speedX = speedX * - 1;
+        }
+        if (getY() == game.getHeight()) {
+            //dead
+            setDead(true);
+            setShoot(false);
+        }
+        if (getY() <= -20) {
+            speedY = speedY * -1;
+        }
+        
+        System.out.println(speedX);
+        setX(getX() + speedX);
+        setY(getY() + speedY);
+    }
+
     public int getX() {
         return x;
     }
@@ -147,41 +173,24 @@ public class Bullet extends Item {
             if (game.getKeyManager().right) {
                 setX(getX() + 10);
             }
-            if(getX() + 120 >= game.getWidth()) {
+            if (getX() + 120 >= game.getWidth()) {
                 setX(game.getWidth() - 120);
-            } else if(getX() <= 55) {
+            } else if (getX() <= 55) {
                 setX(55);
             }
-            if(game.getKeyManager().space) {
+            if (game.getKeyManager().space) {
                 shoot = true;
             }
         } else {
-            
-            if(getX() + 32 >= game.getWidth()){
-                speedX = speedX * - 1;
-            }
-            if(getX() <= 0){
-                speedX = speedX * -1;
-            }
-            if(getY()  == game.getHeight()){
-                //dead
-                setDead(true);
-                setShoot(false);
-            }
-            if(getY() <= -20){
-                speedY = speedY * -1;
-            }
-            
-            setX(getX()+speedX);
-            setY(getY()+speedY);
-            
+            bulletDirection(direction);
         }
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-   public Rectangle getPerimetro() {
+    public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
@@ -192,25 +201,29 @@ public class Bullet extends Item {
     public boolean intersecta(Object obj) {
         return obj instanceof Bar && getPerimetro().intersects(((Bar) obj).getPerimetro());
     }
+
     public boolean intersectaBarra(Object obj) {
         return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
     }
+
     public void render(Graphics g) {
         g.drawImage(Assets.bullet, getX(), getY(), getWidth(), getHeight(), null);
     }
+
     /**
      * Change direction method
      */
     void changeDirection() {
-         speedX = speedX * -1;
-         speedY = speedY * - 1;
+        speedX = speedX * -1;
+        speedY = speedY * - 1;
     }
+
     /**
      * Change direction when hitted by player
      */
     void changeBulletByPlayerDirection() {
-           speedX = speedX * -1;
-         speedY = speedY * - 1;
+        speedX = speedX * -1;
+        speedY = speedY * - 1;
     }
 
 }
