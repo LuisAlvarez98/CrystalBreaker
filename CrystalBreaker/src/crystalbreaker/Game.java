@@ -117,7 +117,7 @@ public class Game implements Runnable {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
         player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
-        bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+        bullet = new Bullet(player.getX() + 70, player.getY() - 80, 64, 64, this);
          initBlocks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -263,15 +263,13 @@ public class Game implements Runnable {
                     if (player.getLives() <= 0) {
                         setGameOver(true);
                     }
-                    bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+                    bullet = new Bullet(player.getX() + 70, player.getY() - 80, 64, 64, this);
                     //setDeath false
                     bullet.setDead(false);
                 }
                 //Intersecta con el jugador
                 if (bullet.intersectaBarra(player)) {
-                    if(!bullet.isShoot()){
-                         bullet.changeBulletByPlayerDirection();
-                    }
+                    bullet.changeBulletByPlayerDirection();
                     bullet.setHit(false);
                 }
                 //Intersecta la ball con las barritas
@@ -298,7 +296,7 @@ public class Game implements Runnable {
             setScore(0);
             //RESETS PLAYER, BULLET AND BLOCKS
             player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
-            bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+            bullet = new Bullet(player.getX() + 70, player.getY() - 60, 64, 64, this);
             initBlocks();
         }
 
@@ -318,7 +316,7 @@ public class Game implements Runnable {
             g.setColor(Color.WHITE);
             g.drawString("Score: " + getScore(), 10, getHeight() - 10);
             g.setColor(Color.WHITE);
-            g.drawString("Lives: " + player.getLives(), getWidth() - 50, getHeight() - 10);
+            g.drawString("Lives: " + player.getLives(), getWidth() - 80, getHeight() - 10);
             player.render(g);
             bullet.render(g);
             if (isGameOver()) {

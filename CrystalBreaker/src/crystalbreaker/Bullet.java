@@ -70,7 +70,7 @@ public class Bullet extends Item {
             setY(getY() + speedY);
         }*/
     
-        setX((numRand%2==0) ? getX()+speedX : getX() +speedX);
+        setX((numRand%2==0) ? getX()+speedX : getX() -speedX);
         setY(getY() - speedY);
         System.out.println("x " + speedX);
         System.out.println("y " + speedY);
@@ -263,14 +263,13 @@ public class Bullet extends Item {
      * Change direction when hitted by player
      */
     void changeBulletByPlayerDirection() {
-        int randNum = (int) (Math.random() * 10 + 1);
+             int randNum = (int) (Math.random() * 10 + 1);
         if (randNum % 2 == 0) {
             speedX = speedX * -1;
             speedY = speedY * - 1;
         } else {
-            speedX = speedX * 1;
+            speedX = speedX * -1;
             speedY = speedY * - 1;
         }
     }
-
 }
