@@ -269,7 +269,9 @@ public class Game implements Runnable {
                 }
                 //Intersecta con el jugador
                 if (bullet.intersectaBarra(player)) {
-                    bullet.changeBulletByPlayerDirection();
+                    if(!bullet.isShoot()){
+                         bullet.changeBulletByPlayerDirection();
+                    }
                     bullet.setHit(false);
                 }
                 //Intersecta la ball con las barritas
