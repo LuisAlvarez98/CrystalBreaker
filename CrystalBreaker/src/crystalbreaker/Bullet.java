@@ -51,10 +51,10 @@ public class Bullet extends Item {
 
     public void bulletDirection(int numRand) {
 
-        if (getX() + 32 >= game.getWidth()) {
+        if (getX() + 50 >= game.getWidth()) {
             speedX = speedX * - 1;
         }
-        if (getX() <= 0) {
+        if (getX() <= -20) {
             speedX = speedX * - 1;
         }
         if (getY() == game.getHeight()) {
@@ -70,10 +70,10 @@ public class Bullet extends Item {
             setY(getY() + speedY);
         }*/
     
-        setX((numRand%2==0) ? getX()+speedX : getX() -speedX);
+        setX((numRand%2==0) ? getX()+speedX : getX() - speedX);
         setY(getY() - speedY);
-        //System.out.println("x " + speedX);
-        //System.out.println("y " + speedY);
+        System.out.println("x " + speedX);
+        System.out.println("y " + speedY);
     }
 
     public boolean isHit() {

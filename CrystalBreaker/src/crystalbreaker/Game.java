@@ -282,7 +282,7 @@ public class Game implements Runnable {
                                 bullet.setHit(true);
                                 bars.get(i).setHealth(bars.get(i).getHealth() - 1);
                                 if(bars.get(i).getHealth() <= 0) bars.remove(i);
-                                System.out.println("Bar" + i + " " + bars.get(i).getHealth());
+                                //System.out.println("Bar" + i + " " + bars.get(i).getHealth());
                                 /*if(bars.get(i).getHealth() <= 0){
                                     bars.remove(i);
                                 } else {
