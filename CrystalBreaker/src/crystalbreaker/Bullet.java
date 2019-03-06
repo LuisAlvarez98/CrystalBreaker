@@ -180,6 +180,7 @@ public class Bullet extends Item {
      */
     @Override
     public void tick() {
+        System.out.println(getWidth() + " " + getHeight());
         // vertical left up
         if (shoot == false) {
             if (game.getKeyManager().left) {
@@ -263,7 +264,7 @@ public class Bullet extends Item {
      * Change direction when hitted by player
      */
     void changeBulletByPlayerDirection() {
-             int randNum = (int) (Math.random() * 10 + 1);
+        int randNum = (int) (Math.random() * 10 + 1);
         if (randNum % 2 == 0) {
             speedX = speedX * - 1;
             speedY = speedY * - 1;
