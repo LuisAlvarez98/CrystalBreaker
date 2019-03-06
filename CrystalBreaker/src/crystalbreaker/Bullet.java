@@ -59,17 +59,15 @@ public class Bullet extends Item {
             setShoot(false);
         }
         if (getY() <= -20) {
-            speedY = speedY * - 1;
-        }
-        if (numRand % 2 == 0) {
-            speedX *= -1;
+            speedY = speedY * -1;
         }
          /*else {
             setX(getX() - speedX);
             setY(getY() + speedY);
         }*/
         System.out.println(speedX);
-        setX(getX() + speedX);
+        
+        setX((numRand%2==0) ? getX()+speedX : getX() - speedX);
         setY(getY() + speedY);
     }
 
