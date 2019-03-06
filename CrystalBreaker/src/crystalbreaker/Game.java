@@ -190,9 +190,7 @@ public class Game implements Runnable {
             }   
             
             // Always close files.
-            for(int i = 0; i < values.size(); i++){
-                System.out.println(values.get(i));
-            }
+            //Set
             setScore(Integer.parseInt(values.get(0)));
             player.setLives(Integer.parseInt(values.get(1)));
             bufferedReader.close();   
@@ -278,9 +276,9 @@ public class Game implements Runnable {
                 for (int i = 0; i < 40; i++) {
                     for (int j = 0; j < 4; j++) {
                         if (bullet.intersecta(bars.get(i))) {
-                            increaseScore();
                             //Kill the bar
                             if(!bullet.isHit())   {
+                                increaseScore();
                                 bullet.setHit(true);
                                 bars.remove(i);
                                 bullet.changeDirection();
