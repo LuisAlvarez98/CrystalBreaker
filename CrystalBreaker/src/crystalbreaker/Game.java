@@ -3,6 +3,12 @@ package crystalbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import static java.lang.System.console;
 import java.util.ArrayList;
 
@@ -30,6 +36,7 @@ public class Game implements Runnable {
 
     private boolean gameOver;
     private int score;
+    private boolean gameStart;
 
     /**
      * Game constructor
@@ -47,8 +54,17 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
         this.score = 0;
+        this.gameStart = false;
     }
 
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
+    
+    public boolean isGameStart() {
+        return gameStart;
+    }
+    
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
@@ -86,7 +102,14 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
-
+    public void initBlocks(){
+         bars = new ArrayList<Bar>();
+         for (int i = 0; i < 40; i++) {
+            for (int j = 0; j < 4; j++) {
+                bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
+            }
+        }
+    }
     /**
      * inits the game with the display and player
      */
@@ -95,11 +118,7 @@ public class Game implements Runnable {
         Assets.init();
         player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
         bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
-        for (int i = 0; i < 40; i++) {
-            for (int j = 0; j < 4; j++) {
-                bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
-            }
-        }
+         initBlocks();
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -143,7 +162,91 @@ public class Game implements Runnable {
      */
     private void tick() {
         keyManager.tick();
-        if (!isGameOver()) {
+        //if save is clicked and is not gameover
+        if(!isGameStart()){
+            //1 to start game
+            if(getKeyManager().space){
+                setGameStart(true);
+            }else if(getKeyManager().load){
+                //load game
+                 // The name of the file to open.
+        String fileName = "gamesave.txt";
+
+        // This will reference one line at a time
+        String line = null;
+
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = 
+                new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+            ArrayList<String>values = new ArrayList<String>();
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+                values.add(line);
+            }   
+            
+            // Always close files.
+            for(int i = 0; i < values.size(); i++){
+                System.out.println(values.get(i));
+            }
+            setScore(Integer.parseInt(values.get(0)));
+            player.setLives(Integer.parseInt(values.get(1)));
+            bufferedReader.close();   
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Unable to open file '" + 
+                fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+            // Or we could just do this: 
+            // ex.printStackTrace();
+        }
+                System.out.println("Load");
+            }
+        }
+        if(getKeyManager().save && !isGameOver() && isGameStart()){
+            int count = 0;
+            if(count == 0){
+                count++;
+        // The name of the file to open.
+        String fileName = "gamesave.txt";
+
+        try {
+            // Assume default encoding.
+            FileWriter fileWriter =
+                new FileWriter(fileName);
+
+            // Always wrap FileWriter in BufferedWriter.
+            BufferedWriter bufferedWriter =
+                new BufferedWriter(fileWriter);
+            /**
+             * NEEDS TO SAVE SCORE LIVES POSITION AND BLOCKS POSITION
+             */
+            // saves score
+            bufferedWriter.write(Integer.toString(getScore())); 
+            bufferedWriter.newLine();
+            bufferedWriter.write(Integer.toString(player.getLives()));
+            // Always close files.
+            bufferedWriter.close();
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error writing to file '"
+                + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+            }
+        }
+        if (!isGameOver() && isGameStart()) {
             //System.out.println(paused);
             if (this.getKeyManager().pause && paused == false) {
                 paused = true;
@@ -169,6 +272,7 @@ public class Game implements Runnable {
                 //Intersecta con el jugador
                 if (bullet.intersectaBarra(player)) {
                     bullet.changeBulletByPlayerDirection();
+                    bullet.setHit(false);
                 }
                 //Intersecta la ball con las barritas
                 for (int i = 0; i < 40; i++) {
@@ -176,8 +280,11 @@ public class Game implements Runnable {
                         if (bullet.intersecta(bars.get(i))) {
                             increaseScore();
                             //Kill the bar
-                            bars.remove(i);
-                            bullet.changeDirection();
+                            if(!bullet.isHit())   {
+                                bullet.setHit(true);
+                                bars.remove(i);
+                                bullet.changeDirection();
+                            }
                         }
                     }
                 }
@@ -192,11 +299,7 @@ public class Game implements Runnable {
             //RESETS PLAYER, BULLET AND BLOCKS
             player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
             bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
-            for (int i = 0; i < 40; i++) {
-                for (int j = 0; j < 4; j++) {
-                    bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
-                }
-            }
+            initBlocks();
         }
 
     }
