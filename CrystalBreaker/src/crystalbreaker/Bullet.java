@@ -180,7 +180,6 @@ public class Bullet extends Item {
      */
     @Override
     public void tick() {
-        System.out.println(getWidth() + " " + getHeight());
         // vertical left up
         if (shoot == false) {
             if (game.getKeyManager().left) {
