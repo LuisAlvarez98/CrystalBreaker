@@ -28,6 +28,9 @@ public class Game implements Runnable {
     private Bullet bullet;
     private KeyManager keyManager;
 
+    private boolean gameOver;
+    private int score;
+
     /**
      * Game constructor
      *
@@ -43,6 +46,27 @@ public class Game implements Runnable {
         paused = false;
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
+        this.score = 0;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void increaseScore() {
+        this.score += 10;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     /**
@@ -69,7 +93,7 @@ public class Game implements Runnable {
     public void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(getWidth()/2 - 150, getHeight() - 200, 1, 200, 200, this);
+        player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
         bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
         for (int i = 0; i < 40; i++) {
             for (int j = 0; j < 4; j++) {
@@ -95,7 +119,7 @@ public class Game implements Runnable {
             now = System.nanoTime();
             delta += (now - lastTime) / timeTick;
             lastTime = now;
-            
+
             if (delta >= 1) {
                 tick();
                 render();
@@ -118,39 +142,63 @@ public class Game implements Runnable {
      * tick method
      */
     private void tick() {
-        //System.out.println(paused);
-        if(this.getKeyManager().pause && paused == false) {
-            paused = true;
-             keyManager.tick();
-        } else if(paused == true && this.getKeyManager().pause) {
-            paused = false;
-          
-        } if(paused == false){
-            keyManager.tick();
-            player.tick();
-            //Pierde la bola
-            if(bullet.isDead()){
-                //Setea la bola en la posicion inicial
-                bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
-                //setDeath false
-                bullet.setDead(false);
+        keyManager.tick();
+        if (!isGameOver()) {
+            //System.out.println(paused);
+            if (this.getKeyManager().pause && paused == false) {
+                paused = true;
+                keyManager.tick();
+            } else if (paused == true && this.getKeyManager().pause) {
+                paused = false;
+
             }
-            //Intersecta con el jugador
-            if(bullet.intersectaBarra(player)){
-                bullet.changeBulletByPlayerDirection();
-            }       
-            //Intersecta la ball con las barritas
-            for (int i = 0; i < 40; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if(bullet.intersecta(bars.get(i))){
-                        //Kill the bar
-                        bars.remove(i);
-                        bullet.changeDirection();
+            if (paused == false) {
+                keyManager.tick();
+                player.tick();
+                //Pierde la bola
+                if (bullet.isDead()) {
+                    //Setea la bola en la posicion inicial
+                    player.decreasePlayerLive();
+                    if (player.getLives() <= 0) {
+                        setGameOver(true);
+                    }
+                    bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+                    //setDeath false
+                    bullet.setDead(false);
+                }
+                //Intersecta con el jugador
+                if (bullet.intersectaBarra(player)) {
+                    bullet.changeBulletByPlayerDirection();
+                }
+                //Intersecta la ball con las barritas
+                for (int i = 0; i < 40; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if (bullet.intersecta(bars.get(i))) {
+                            increaseScore();
+                            //Kill the bar
+                            bars.remove(i);
+                            bullet.changeDirection();
+                        }
                     }
                 }
+                bullet.tick();
             }
-            bullet.tick();
+        } else if (getKeyManager().enter) {
+            //init everything
+            setGameOver(false);
+            //Resets lives and score
+            player.setLives(3);
+            setScore(0);
+            //RESETS PLAYER, BULLET AND BLOCKS
+            player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
+            bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
+            for (int i = 0; i < 40; i++) {
+                for (int j = 0; j < 4; j++) {
+                    bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
+                }
+            }
         }
+
     }
 
     /**
@@ -163,15 +211,22 @@ public class Game implements Runnable {
         } else {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);   
+
+            g.setColor(Color.WHITE);
+            g.drawString("Score: " + getScore(), 10, getHeight() - 10);
+            g.setColor(Color.WHITE);
+            g.drawString("Lives: " + player.getLives(), getWidth() - 50, getHeight() - 10);
+            player.render(g);
             bullet.render(g);
-            
+            if (isGameOver()) {
+                g.drawImage(Assets.gameover, 0, 0, getWidth(), getHeight(), null);
+            }
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     bars.get(i).render(g);
                 }
             }
-            
+
             bs.show();
             g.dispose();
         }
