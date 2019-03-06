@@ -268,19 +268,26 @@ public class Game implements Runnable {
                     bullet.setDead(false);
                 }
                 //Intersecta con el jugador
-                if (bullet.intersectaBarra(player)) {
+                if (bullet.intersectaJugador(player)) {
                     bullet.changeBulletByPlayerDirection();
                     bullet.setHit(false);
                 }
                 //Intersecta la ball con las barritas
                 for (int i = 0; i < 40; i++) {
                     for (int j = 0; j < 4; j++) {
-                        if (bullet.intersecta(bars.get(i))) {
+                        if (bullet.intersectaBarra(bars.get(i))) {
                             //Kill the bar
                             if(!bullet.isHit())   {
                                 increaseScore();
                                 bullet.setHit(true);
-                                bars.remove(i);
+                                bars.get(i).setHealth(bars.get(i).getHealth() - 1);
+                                if(bars.get(i).getHealth() <= 0) bars.remove(i);
+                                System.out.println("Bar" + i + " " + bars.get(i).getHealth());
+                                /*if(bars.get(i).getHealth() <= 0){
+                                    bars.remove(i);
+                                } else {
+                                    bars.get(i).setHealth(bars.get(i).getHealth() - 1);
+                                }*/
                                 bullet.changeDirection();
                             }
                         }
@@ -319,15 +326,16 @@ public class Game implements Runnable {
             g.drawString("Lives: " + player.getLives(), getWidth() - 80, getHeight() - 10);
             player.render(g);
             bullet.render(g);
-            if (isGameOver()) {
-                g.drawImage(Assets.gameover, 0, 0, getWidth(), getHeight(), null);
-            }
+            
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     bars.get(i).render(g);
                 }
             }
-
+            if (isGameOver()) {
+                bars.remove(g);
+                g.drawImage(Assets.gameover, 0, 0, getWidth(), getHeight(), null);
+            }
             bs.show();
             g.dispose();
         }

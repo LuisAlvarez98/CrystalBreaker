@@ -39,8 +39,8 @@ public class Bullet extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        speedY = 10;
-        speedX = 10;
+        speedY = -5;
+        speedX = 5;
         shoot = false;
         direction = (int) (Math.random() * 10 + 1);
     }
@@ -72,8 +72,8 @@ public class Bullet extends Item {
     
         setX((numRand%2==0) ? getX()+speedX : getX() -speedX);
         setY(getY() - speedY);
-        System.out.println("x " + speedX);
-        System.out.println("y " + speedY);
+        //System.out.println("x " + speedX);
+        //System.out.println("y " + speedY);
     }
 
     public boolean isHit() {
@@ -232,11 +232,11 @@ public class Bullet extends Item {
      * @param obj
      * @return
      */
-    public boolean intersecta(Object obj) {
+    public boolean intersectaBarra(Object obj) {
         return obj instanceof Bar && getPerimetro().intersects(((Bar) obj).getPerimetro());
     }
 
-    public boolean intersectaBarra(Object obj) {
+    public boolean intersectaJugador(Object obj) {
         return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
     }
 
@@ -265,10 +265,10 @@ public class Bullet extends Item {
     void changeBulletByPlayerDirection() {
              int randNum = (int) (Math.random() * 10 + 1);
         if (randNum % 2 == 0) {
-            speedX = speedX * -1;
+            speedX = speedX * - 1;
             speedY = speedY * - 1;
         } else {
-            speedX = speedX * -1;
+            speedX = speedX * 1;
             speedY = speedY * - 1;
         }
     }
