@@ -179,7 +179,6 @@ public class Bullet extends Item {
             if(getY() <= -20){
                 speedY = speedY * -1;
             }
-            
             setX(getX()+speedX);
             setY(getY()+speedY);
             
