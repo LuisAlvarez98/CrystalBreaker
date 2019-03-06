@@ -24,6 +24,7 @@ public class Bullet extends Item {
     private Game game;
     private boolean dead;
     private boolean hit;
+
     /**
      *
      * @param startX
@@ -45,9 +46,7 @@ public class Bullet extends Item {
     }
 
     public void bulletDirection(int numRand) {
-        if (numRand % 2 == 0) {
-            speedX *= -1;
-        }
+
         if (getX() + 32 >= game.getWidth()) {
             speedX = speedX * - 1;
         }
@@ -60,13 +59,20 @@ public class Bullet extends Item {
             setShoot(false);
         }
         if (getY() <= -20) {
-            speedY = speedY * -1;
+            speedY = speedY * - 1;
         }
-        
+        if (numRand % 2 == 0) {
+            speedX *= -1;
+        }
+         /*else {
+            setX(getX() - speedX);
+            setY(getY() + speedY);
+        }*/
         System.out.println(speedX);
         setX(getX() + speedX);
         setY(getY() + speedY);
     }
+
     public boolean isHit() {
         return hit;
     }
@@ -74,7 +80,7 @@ public class Bullet extends Item {
     public void setHit(boolean hit) {
         this.hit = hit;
     }
-    
+
     public int getX() {
         return x;
     }
@@ -190,24 +196,24 @@ public class Bullet extends Item {
             }
         } else {
             bulletDirection(direction);
-            
-            if(getX() + 32 >= game.getWidth()){
+
+            /*if (getX() + 32 >= game.getWidth()) {
                 speedX = speedX * - 1;
             }
-            if(getX() <= 0){
+            if (getX() <= 0) {
                 speedX = speedX * -1;
             }
-            if(getY()  == game.getHeight()){
+            if (getY() == game.getHeight()) {
                 //dead
                 setDead(true);
                 setShoot(false);
             }
-            if(getY() <= -20){
+            if (getY() <= -20) {
                 speedY = speedY * -1;
             }
-            setX(getX()+speedX);
-            setY(getY()+speedY);
-            
+            setX(getX() + speedX);
+            setY(getY() + speedY);*/
+
         }
     }
 
@@ -247,8 +253,14 @@ public class Bullet extends Item {
      * Change direction when hitted by player
      */
     void changeBulletByPlayerDirection() {
-        speedX = speedX * -1;
-        speedY = speedY * - 1;
+        int randNum = (int) (Math.random() * 10 + 1);
+        if (randNum % 2 == 0) {
+            speedX = speedX * -1;
+            speedY = speedY * - 1;
+        } else {
+            speedX = speedX * 1;
+            speedY = speedY * - 1;
+        }
     }
 
 }
