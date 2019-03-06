@@ -86,7 +86,14 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
-
+    public void initBlocks(){
+         bars = new ArrayList<Bar>();
+         for (int i = 0; i < 40; i++) {
+            for (int j = 0; j < 4; j++) {
+                bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
+            }
+        }
+    }
     /**
      * inits the game with the display and player
      */
@@ -95,11 +102,7 @@ public class Game implements Runnable {
         Assets.init();
         player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
         bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
-        for (int i = 0; i < 40; i++) {
-            for (int j = 0; j < 4; j++) {
-                bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
-            }
-        }
+         initBlocks();
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -192,11 +195,7 @@ public class Game implements Runnable {
             //RESETS PLAYER, BULLET AND BLOCKS
             player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
             bullet = new Bullet(player.getX() + 60, player.getY() - 40, 64, 64, this);
-            for (int i = 0; i < 40; i++) {
-                for (int j = 0; j < 4; j++) {
-                    bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
-                }
-            }
+            initBlocks();
         }
 
     }
