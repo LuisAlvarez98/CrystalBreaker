@@ -87,10 +87,10 @@ public class Game implements Runnable {
      *
      * @param paused
      */
-    public void setPaused(boolean paused) {
-        this.paused = paused;
+    public void setPaused() {
+        this.paused = !paused;
     }
-
+    
     /**
      * isWon
      *
@@ -247,6 +247,7 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         //Gamestart
+        System.out.println(isPaused());
         if (!isGameStart()) {
             //if space is clicked it starts the game
             if (getKeyManager().space) {
@@ -301,6 +302,8 @@ public class Game implements Runnable {
                 }
             }
         }
+        
+        
         //When you click S you save the current instance of the game
         if (getKeyManager().save && !isGameOver() && isGameStart()) {
             //counter used to avoid multiple clicks
@@ -400,7 +403,11 @@ public class Game implements Runnable {
                 }
             }
             //if is not paused game runs normally
+            if(getKeyManager().pause) {
+                setPaused();
+            }
             if (!isPaused()) {
+                
                 player.tick();
                 bullet.tick();
                 for (int i = 0; i < powerups.size(); i++) {
