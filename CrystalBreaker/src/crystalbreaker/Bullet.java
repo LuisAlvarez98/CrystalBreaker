@@ -42,7 +42,7 @@ public class Bullet extends Item {
         speedY = -5;
         speedX = 5;
         shoot = false;
-        direction = (int) (Math.random() * 10 + 1);
+        direction = (int) (Math.random() * 10 + 2);
     }
 
     public boolean isShoot() {
@@ -180,7 +180,6 @@ public class Bullet extends Item {
      */
     @Override
     public void tick() {
-        System.out.println(getWidth() + " " + getHeight());
         // vertical left up
         if (shoot == false) {
             if (game.getKeyManager().left) {
@@ -268,9 +267,10 @@ public class Bullet extends Item {
         if (randNum % 2 == 0) {
             speedX = speedX * - 1;
             speedY = speedY * - 1;
-        } else {
-            speedX = speedX * 1;
-            speedY = speedY * - 1;
+        } 
+        else {
+            speedX *= 1;
+            speedY *= - 1;
         }
     }
 }

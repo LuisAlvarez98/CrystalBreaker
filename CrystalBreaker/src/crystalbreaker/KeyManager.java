@@ -55,7 +55,6 @@ public class KeyManager implements KeyListener{
         keys[e.getKeyCode()] = false;
     }
 
-    
     /**
      * to enable or disable moves on every tick
      */
