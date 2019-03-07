@@ -4,12 +4,12 @@ import java.awt.image.BufferedImage;
 
 /**
  * Assets Class
- * @author Luis Felipe Alvarez Sanchez A01194173
+ * @author Luis Felipe Alvarez Sanchez and Genaro
  * 4 Feb 2019
  */
 public class Assets {
-    public static BufferedImage hank, background, bar, bar0, bar1, bar2, bullet, bullet_destroyed, gameover, howto, won;
     public static SoundClip intro, explosion;
+    public static BufferedImage hank, background, bar, bar0, bar1, bar2, bullet, bullet_destroyed, gameover, howto, won, flask;
     /**
      * loads the assets
      */
@@ -27,6 +27,7 @@ public class Assets {
         won = ImageLoader.loadImage("/images/won.png");
         intro = new SoundClip("/sounds/intro.wav");
         explosion = new SoundClip("/sounds/explosion.wav");
+        flask = ImageLoader.loadImage("/images/flask.png");
     }
     
 }

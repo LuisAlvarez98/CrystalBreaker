@@ -39,8 +39,8 @@ public class Bullet extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        speedY = -6;
-        speedX = 6;
+        speedY = -5;
+        speedX = 5;
         shoot = false;
         direction = (int) (Math.random() * 10 + 2);
     }
@@ -227,7 +227,7 @@ public class Bullet extends Item {
     }
 
     /**
-     *
+     *Rectangle mehtod
      * @return
      */
     public Rectangle getPerimetro() {
