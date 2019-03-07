@@ -257,9 +257,11 @@ public class Bullet extends Item {
         if (randNum % 2 == 0) {
             speedX = speedX * -1;
             speedY = speedY * - 1;
+            
         } else {
             speedX = speedX * 1;
             speedY = speedY * - 1;
+            
         }
     }
 
@@ -271,10 +273,14 @@ public class Bullet extends Item {
         if (randNum % 2 == 0) {
             speedX = speedX * - 1;
             speedY = speedY * - 1;
+            setX(getX() - 5);
+            setY(getY() - 5);
         } 
         else {
             speedX *= 1;
             speedY *= - 1;
+            setX(getX() + 5);
+            setY(getY() - 5);
         }
     }
 }
