@@ -59,12 +59,10 @@ public class KeyManager implements KeyListener{
      * to enable or disable moves on every tick
      */
     public void tick(){
-        up = keys[KeyEvent.VK_UP];
-        down = keys[KeyEvent.VK_DOWN];
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
-        pause = keys[KeyEvent.VK_E];
+        pause = keys[KeyEvent.VK_P];
         enter = keys[KeyEvent.VK_ENTER];
         save = keys[KeyEvent.VK_S];
         load = keys[KeyEvent.VK_L];

@@ -37,6 +37,9 @@ public class Game implements Runnable {
     private boolean gameOver;
     private int score;
     private boolean gameStart;
+    
+    private boolean won;
+    private int enemies;
 
     /**
      * Game constructor
@@ -55,6 +58,8 @@ public class Game implements Runnable {
         bars = new ArrayList<Bar>();
         this.score = 0;
         this.gameStart = false;
+        this.won = false;
+        this.enemies = 0;
     }
 
     public void setGameStart(boolean gameStart) {
@@ -69,6 +74,14 @@ public class Game implements Runnable {
         this.paused = paused;
     }
 
+    public boolean isWon() {
+        return won;
+    }
+
+    public void setWon(boolean won) {
+        this.won = won;
+    }
+    
     public boolean isGameStart() {
         return gameStart;
     }
@@ -118,6 +131,7 @@ public class Game implements Runnable {
                 bars.add(new Bar(10 + i * 120, 10 + j * 60, 100, 100, this));
             }
         }
+        this.enemies = bars.size();
     }
 
     /**
@@ -178,7 +192,7 @@ public class Game implements Runnable {
             if (getKeyManager().space) {
                 setGameStart(true);
             } else if (getKeyManager().load) {
-                  setGameStart(true);
+                //setGameStart(true);
                 //load game
                 // The name of the file to open.
                 String fileName = "gamesave.txt";
@@ -263,9 +277,9 @@ public class Game implements Runnable {
                             Bar bar = bars.get(i);
                             bufferedWriter.write(Integer.toString(bar.getX()) + '\n');
                             bufferedWriter.write(Integer.toString(bar.getY()) + '\n');
-                            bufferedWriter.write(Integer.toString(bar.getHealth())+ '\n');
+                            bufferedWriter.write(Integer.toString(bar.getHealth()) + '\n');
                             int dead = (bar.isDead() ? 1 : 0);
-                            bufferedWriter.write(Integer.toString(dead)+ '\n');
+                            bufferedWriter.write(Integer.toString(dead) + '\n');
                         }
                     }
                     // Always close files.
@@ -281,7 +295,7 @@ public class Game implements Runnable {
         }
 
         //Game
-        if (!isGameOver() && isGameStart()) {
+        if (!isGameOver() && isGameStart() && !isWon()) {
             //System.out.println(paused);
             //Pierde la bola
             if (bullet.isDead()) {
@@ -304,6 +318,10 @@ public class Game implements Runnable {
                 for (int j = 0; j < 4; j++) {
                     if (bullet.intersectaBarra(bars.get(i))) {
                         //Kill the bar
+                        this.enemies--;
+                        if(this.enemies <= 0){
+                            setWon(true);
+                        }
                         if (!bullet.isHit()) {
                             increaseScore();
                             bullet.setHit(true);
@@ -358,13 +376,21 @@ public class Game implements Runnable {
             g.drawString("Lives: " + player.getLives(), getWidth() - 80, getHeight() - 10);
             player.render(g);
             bullet.render(g);
+          
 
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if(!bars.get(i).isDead()){
+                    if (!bars.get(i).isDead()) {
                         bars.get(i).render(g);
                     }
                 }
+            }
+            if (!isGameStart()) {
+                g.drawImage(Assets.howto, 0, 0, getWidth(), getHeight(), null);
+            }
+            if (isWon()) {
+                bars.remove(g);
+                 g.drawImage(Assets.won, 0, 0, getWidth(), getHeight(), null);
             }
             if (isGameOver()) {
                 bars.remove(g);
