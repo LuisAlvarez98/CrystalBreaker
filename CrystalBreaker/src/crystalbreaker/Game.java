@@ -193,16 +193,17 @@ public class Game implements Runnable {
                     // Always wrap FileReader in BufferedReader.
                     BufferedReader bufferedReader
                             = new BufferedReader(fileReader);
-                    ArrayList<String> values = new ArrayList<String>();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        System.out.println(line);
-                        values.add(line);
-                    }
-
-                    // Always close files.
+                    
+                    setScore(Integer.parseInt(bufferedReader.readLine()));
+                    player.setLives(Integer.parseInt(bufferedReader.readLine()));
+                    player.setX(Integer.parseInt(bufferedReader.readLine()));
+                    player.setY(Integer.parseInt(bufferedReader.readLine()));
+                    bullet.setX(Integer.parseInt(bufferedReader.readLine()));
+                    bullet.setY(Integer.parseInt(bufferedReader.readLine()));
+                    bullet.setSpeedX(Integer.parseInt(bufferedReader.readLine()));
+                    bullet.setSpeedY(Integer.parseInt(bufferedReader.readLine()));
                     //Set
-                    setScore(Integer.parseInt(values.get(0)));
-                    player.setLives(Integer.parseInt(values.get(1)));
+             
                     bufferedReader.close();
                 } catch (FileNotFoundException ex) {
                     System.out.println(
@@ -238,9 +239,14 @@ public class Game implements Runnable {
                      * NEEDS TO SAVE SCORE LIVES POSITION AND BLOCKS POSITION
                      */
                     // saves score
-                    bufferedWriter.write(Integer.toString(getScore()));
-                    bufferedWriter.newLine();
-                    bufferedWriter.write(Integer.toString(player.getLives()));
+                    bufferedWriter.write(Integer.toString(getScore()) + "\n");
+                    bufferedWriter.write(Integer.toString(player.getLives()) + "\n");
+                    bufferedWriter.write(Integer.toString(player.getX()) + "\n");
+                    bufferedWriter.write(Integer.toString(player.getY()) + "\n");
+                    bufferedWriter.write(Integer.toString(bullet.getX()) + "\n");
+                    bufferedWriter.write(Integer.toString(bullet.getY()) + "\n");
+                    bufferedWriter.write(Integer.toString(bullet.getSpeedX()) + "\n");
+                    bufferedWriter.write(Integer.toString(bullet.getSpeedY()) + "\n");
                     // Always close files.
                     bufferedWriter.close();
                 } catch (IOException ex) {
@@ -252,8 +258,10 @@ public class Game implements Runnable {
                 }
             }
         }
+
         //Game
         if (!isGameOver() && isGameStart()) {
+            //System.out.println(paused);
             //Pierde la bola
             if (bullet.isDead()) {
                 //Setea la bola en la posicion inicial
