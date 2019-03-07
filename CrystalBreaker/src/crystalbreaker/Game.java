@@ -40,8 +40,10 @@ public class Game implements Runnable {
     private boolean won; // did you win?
     private int enemies; // number of enemies
 
+    private ArrayList<PowerUp> powerups;
+
     /**
-     * Game constructor
+     * Game Constructor
      *
      * @param title
      * @param width
@@ -55,6 +57,7 @@ public class Game implements Runnable {
         paused = false;
         keyManager = new KeyManager();
         bars = new ArrayList<Bar>();
+        powerups = new ArrayList<PowerUp>();
         this.score = 0;
         this.gameStart = false;
         this.won = false;
@@ -134,26 +137,30 @@ public class Game implements Runnable {
     }
 
     /**
-     *IncreaseScore method
-     * increases score by 10
+     * IncreaseScore method increases score by 10
      */
     public void increaseScore() {
         this.score += 10;
     }
+
     /**
      * setScore method
-     * @param score 
+     *
+     * @param score
      */
     public void setScore(int score) {
         this.score = score;
     }
+
     /**
      * getScore method
+     *
      * @return score
      */
     public int getScore() {
         return score;
     }
+
     /**
      * getHeight method
      *
@@ -162,6 +169,7 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
+
     /**
      * getWidth method
      *
@@ -170,9 +178,9 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
+
     /**
-     * initBlocks method
-     * inits the blocks position and size on the game
+     * initBlocks method inits the blocks position and size on the game
      */
     public void initBlocks() {
         bars = new ArrayList<Bar>();
@@ -183,6 +191,7 @@ public class Game implements Runnable {
         }
         this.enemies = bars.size();
     }
+
     /**
      * inits the game with the display and player
      */
@@ -195,6 +204,7 @@ public class Game implements Runnable {
         initBlocks();
         display.getJframe().addKeyListener(keyManager);
     }
+
     /**
      * run method
      */
@@ -219,6 +229,7 @@ public class Game implements Runnable {
         }
         stop();
     }
+
     /**
      * getKeyManager method
      *
@@ -305,7 +316,7 @@ public class Game implements Runnable {
                     // Always wrap FileWriter in BufferedWriter.
                     BufferedWriter bufferedWriter
                             = new BufferedWriter(fileWriter);
-                    
+
                     // saves everything on the textfile
                     bufferedWriter.write(Integer.toString(getScore()) + '\n');
                     bufferedWriter.write(Integer.toString(player.getLives()) + '\n');
@@ -369,6 +380,12 @@ public class Game implements Runnable {
                             bullet.setHit(true);
                             bars.get(i).setHealth(bars.get(i).getHealth() - 1);
                             if (bars.get(i).getHealth() <= 0) {
+                                //Random powerups when block destroyed
+                                int randNum = (int) (Math.random() * 10 + 1);
+                                if (randNum % 2 == 0) {
+                                    PowerUp powerup = new PowerUp(bars.get(i).getX(), bars.get(i).getY(), 50, 50, this);
+                                    powerups.add(powerup);
+                                }
                                 bars.get(i).setDead(true);
                                 bars.remove(i);
                             }
@@ -382,6 +399,15 @@ public class Game implements Runnable {
             if (!isPaused()) {
                 player.tick();
                 bullet.tick();
+                for (int i = 0; i < powerups.size(); i++) {
+                    powerups.get(i).tick();
+                    if (powerups.get(i).intersecta(player)) {
+                        increaseScore();
+                        powerups.remove(i);
+                    }else if(powerups.get(i).isDead()){
+                        powerups.remove(i);
+                    }
+                }
             }
             //if game is over and you hit enter then it resets the game
         } else if (getKeyManager().enter) {
@@ -397,9 +423,9 @@ public class Game implements Runnable {
         }
 
     }
+
     /**
-     * render method
-     * where all the magic happens
+     * render method where all the magic happens
      */
     private void render() {
         bs = display.getCanvas().getBufferStrategy();
@@ -423,6 +449,9 @@ public class Game implements Runnable {
                     }
                 }
             }
+            for (int i = 0; i < powerups.size(); i++) {
+                powerups.get(i).render(g);
+            }
             //if the game hasnt started it displays the howto
             if (!isGameStart()) {
                 g.drawImage(Assets.howto, 0, 0, getWidth(), getHeight(), null);
@@ -440,6 +469,7 @@ public class Game implements Runnable {
             g.dispose();
         }
     }
+
     /**
      * start method
      */
@@ -450,6 +480,7 @@ public class Game implements Runnable {
             thread.start();
         }
     }
+
     /**
      * stop method
      */

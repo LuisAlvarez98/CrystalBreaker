@@ -225,7 +225,7 @@ public class Bullet extends Item {
     }
 
     /**
-     *
+     *Rectangle mehtod
      * @return
      */
     public Rectangle getPerimetro() {
