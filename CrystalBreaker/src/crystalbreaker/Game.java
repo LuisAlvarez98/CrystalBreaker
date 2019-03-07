@@ -178,6 +178,7 @@ public class Game implements Runnable {
             if (getKeyManager().space) {
                 setGameStart(true);
             } else if (getKeyManager().load) {
+                  setGameStart(true);
                 //load game
                 // The name of the file to open.
                 String fileName = "gamesave.txt";
@@ -193,7 +194,7 @@ public class Game implements Runnable {
                     // Always wrap FileReader in BufferedReader.
                     BufferedReader bufferedReader
                             = new BufferedReader(fileReader);
-                    
+
                     setScore(Integer.parseInt(bufferedReader.readLine()));
                     player.setLives(Integer.parseInt(bufferedReader.readLine()));
                     player.setX(Integer.parseInt(bufferedReader.readLine()));
@@ -202,8 +203,17 @@ public class Game implements Runnable {
                     bullet.setY(Integer.parseInt(bufferedReader.readLine()));
                     bullet.setSpeedX(Integer.parseInt(bufferedReader.readLine()));
                     bullet.setSpeedY(Integer.parseInt(bufferedReader.readLine()));
-                    //Set
-             
+                    for (int i = 0; i < 40; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            Bar bar = bars.get(i);
+                            bar.setX(Integer.parseInt(bufferedReader.readLine()));
+                            bar.setY(Integer.parseInt(bufferedReader.readLine()));
+                            bar.setHealth(Integer.parseInt(bufferedReader.readLine()));
+                            int dead = Integer.parseInt(bufferedReader.readLine());
+                            //if dead is true
+                            bar.setDead(dead == 1);
+                        }
+                    }
                     bufferedReader.close();
                 } catch (FileNotFoundException ex) {
                     System.out.println(
@@ -239,14 +249,25 @@ public class Game implements Runnable {
                      * NEEDS TO SAVE SCORE LIVES POSITION AND BLOCKS POSITION
                      */
                     // saves score
-                    bufferedWriter.write(Integer.toString(getScore()) + "\n");
-                    bufferedWriter.write(Integer.toString(player.getLives()) + "\n");
-                    bufferedWriter.write(Integer.toString(player.getX()) + "\n");
-                    bufferedWriter.write(Integer.toString(player.getY()) + "\n");
-                    bufferedWriter.write(Integer.toString(bullet.getX()) + "\n");
-                    bufferedWriter.write(Integer.toString(bullet.getY()) + "\n");
-                    bufferedWriter.write(Integer.toString(bullet.getSpeedX()) + "\n");
-                    bufferedWriter.write(Integer.toString(bullet.getSpeedY()) + "\n");
+                    bufferedWriter.write(Integer.toString(getScore()) + '\n');
+                    bufferedWriter.write(Integer.toString(player.getLives()) + '\n');
+                    bufferedWriter.write(Integer.toString(player.getX()) + '\n');
+                    bufferedWriter.write(Integer.toString(player.getY()) + '\n');
+                    bufferedWriter.write(Integer.toString(bullet.getX()) + '\n');
+                    bufferedWriter.write(Integer.toString(bullet.getY()) + '\n');
+                    bufferedWriter.write(Integer.toString(bullet.getSpeedX()) + '\n');
+                    bufferedWriter.write(Integer.toString(bullet.getSpeedY()) + '\n');
+
+                    for (int i = 0; i < 40; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            Bar bar = bars.get(i);
+                            bufferedWriter.write(Integer.toString(bar.getX()) + '\n');
+                            bufferedWriter.write(Integer.toString(bar.getY()) + '\n');
+                            bufferedWriter.write(Integer.toString(bar.getHealth())+ '\n');
+                            int dead = (bar.isDead() ? 1 : 0);
+                            bufferedWriter.write(Integer.toString(dead)+ '\n');
+                        }
+                    }
                     // Always close files.
                     bufferedWriter.close();
                 } catch (IOException ex) {
@@ -288,6 +309,7 @@ public class Game implements Runnable {
                             bullet.setHit(true);
                             bars.get(i).setHealth(bars.get(i).getHealth() - 1);
                             if (bars.get(i).getHealth() <= 0) {
+                                bars.get(i).setDead(true);
                                 bars.remove(i);
                             }
                             System.out.println("Bar" + i + " " + bars.get(i).getHealth());
@@ -339,7 +361,9 @@ public class Game implements Runnable {
 
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
-                    bars.get(i).render(g);
+                    if(!bars.get(i).isDead()){
+                        bars.get(i).render(g);
+                    }
                 }
             }
             if (isGameOver()) {
