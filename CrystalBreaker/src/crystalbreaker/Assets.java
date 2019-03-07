@@ -8,7 +8,8 @@ import java.awt.image.BufferedImage;
  * 4 Feb 2019
  */
 public class Assets {
-    public static BufferedImage hank, background, bar, bar0, bar1, bar2, bullet, gameover, howto, won, flask;
+    public static SoundClip intro, explosion;
+    public static BufferedImage hank, background, bar, bar0, bar1, bar2, bullet, bullet_destroyed, gameover, howto, won, flask;
     /**
      * loads the assets
      */
@@ -20,9 +21,12 @@ public class Assets {
         bar1 = ImageLoader.loadImage("/images/bar_1.png");
         bar0 = ImageLoader.loadImage("/images/bar_0.png");
         bullet = ImageLoader.loadImage("/images/bullet.png");
+        bullet_destroyed = ImageLoader.loadImage("/images/bullet_explosion.png");
         gameover = ImageLoader.loadImage("/images/gameover.png");
         howto = ImageLoader.loadImage("/images/howto.png");
         won = ImageLoader.loadImage("/images/won.png");
+        intro = new SoundClip("/sounds/intro.wav");
+        explosion = new SoundClip("/sounds/explosion.wav");
         flask = ImageLoader.loadImage("/images/flask.png");
     }
     

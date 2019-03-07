@@ -53,9 +53,11 @@ public class Bullet extends Item {
 
         if (getX() + 50 >= game.getWidth()) {
             speedX = speedX * - 1;
+            setX(getX() - 20);
         }
         if (getX() <= -20) {
             speedX = speedX * - 1;
+            setX(getX() + 10);
         }
         if (getY() == game.getHeight()) {
             //dead
@@ -245,7 +247,17 @@ public class Bullet extends Item {
     }
 
     public void render(Graphics g) {
-        g.drawImage(Assets.bullet, getX(), getY(), getWidth(), getHeight(), null);
+        if(isHit()) {
+            int count = 1000;
+            while(count >=0){
+                g.drawImage(Assets.bullet_destroyed, getX(), getY(), getWidth(), getHeight(), null);
+                count -= 1;
+                System.out.println(count);
+                setHit(false);
+            }
+        } else {
+            g.drawImage(Assets.bullet, getX(), getY(), getWidth(), getHeight(), null);
+        }
     }
 
     /**
@@ -255,7 +267,7 @@ public class Bullet extends Item {
     void changeDirection() {
         int randNum = (int) (Math.random() * 10 + 1);
         if (randNum % 2 == 0) {
-            speedX = speedX * -1;
+            speedX = speedX * - 1;
             speedY = speedY * - 1;
             
         } else {
