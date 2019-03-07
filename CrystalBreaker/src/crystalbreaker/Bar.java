@@ -14,6 +14,7 @@ public class Bar extends Item{
     private int height;
     private int health;
     private Game game;
+    private boolean dead;
     
     /**
      * Player constructor
@@ -29,6 +30,7 @@ public class Bar extends Item{
         this.height = height;
         health = 3;
         this.game = game;
+        this.dead = false;
     }
     /**
      * getHeight method
@@ -37,6 +39,15 @@ public class Bar extends Item{
     public int getHeight() {
         return height;
     }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+    
     /**
      * getWidth method
      * @return width

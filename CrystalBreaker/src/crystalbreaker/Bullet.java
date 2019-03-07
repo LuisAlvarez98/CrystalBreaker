@@ -108,6 +108,10 @@ public class Bullet extends Item {
         this.y = y;
     }
 
+    public int getSpeedX() {
+        return speedX;
+    }
+
     public void setSpeedX(int speedX) {
         this.speedX = speedX;
     }
