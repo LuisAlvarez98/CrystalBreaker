@@ -9,37 +9,36 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.System.console;
 import java.util.ArrayList;
 
 /**
- * Game Class
+ * Game Class Crystal Braker Game
  *
- * @author Luis Felipe Alvarez Sanchez A01194173 4 Feb 2019
+ * @author Luis Felipe Alvarez Sanchez and Genaro
  */
 public class Game implements Runnable {
 
-    private BufferStrategy bs;
-    private Graphics g;
-    private Display display;
-    String title;
-    private int width;
-    private int height;
-    private Thread thread;
-    private boolean running;
-    private boolean paused;
+    private BufferStrategy bs; // BufferStrategy var
+    private Graphics g; // for the graphics
+    private Display display; // for the display of the game
+    String title; // the title of the game
+    private int width; // the width of the game
+    private int height; //the height of the game
+    private Thread thread; //the thread of the game
+    private boolean running; //boolean saying if it is running
+    private boolean paused; // paused boolean
 
-    private ArrayList<Bar> bars;
-    private Player player;
-    private Bullet bullet;
-    private KeyManager keyManager;
+    private ArrayList<Bar> bars; //blocks array list
+    private Player player; //player instance
+    private Bullet bullet; //bullet instance
+    private KeyManager keyManager; //key manager
 
-    private boolean gameOver;
-    private int score;
-    private boolean gameStart;
-    
-    private boolean won;
-    private int enemies;
+    private boolean gameOver; //gameover boolean
+    private int score; //score of the game
+    private boolean gameStart; //gamestart boolean
+
+    private boolean won; // did you win?
+    private int enemies; // number of enemies
 
     /**
      * Game constructor
@@ -62,50 +61,99 @@ public class Game implements Runnable {
         this.enemies = 0;
     }
 
+    /**
+     * setGameStart method
+     *
+     * @param gameStart
+     */
     public void setGameStart(boolean gameStart) {
         this.gameStart = gameStart;
     }
 
+    /**
+     * isPaused method
+     *
+     * @return paused
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     * setPaused method
+     *
+     * @param paused
+     */
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
 
+    /**
+     * isWon
+     *
+     * @return won
+     */
     public boolean isWon() {
         return won;
     }
 
+    /**
+     * setWon method
+     *
+     * @param won
+     */
     public void setWon(boolean won) {
         this.won = won;
     }
-    
+
+    /**
+     * isGameStart method
+     *
+     * @return gameStart
+     */
     public boolean isGameStart() {
         return gameStart;
     }
 
+    /**
+     * setGameOver method
+     *
+     * @param gameOver
+     */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
+    /**
+     * isGameOver method
+     *
+     * @return gameOver
+     */
     public boolean isGameOver() {
         return gameOver;
     }
 
+    /**
+     *IncreaseScore method
+     * increases score by 10
+     */
     public void increaseScore() {
         this.score += 10;
     }
-
+    /**
+     * setScore method
+     * @param score 
+     */
     public void setScore(int score) {
         this.score = score;
     }
-
+    /**
+     * getScore method
+     * @return score
+     */
     public int getScore() {
         return score;
     }
-
     /**
      * getHeight method
      *
@@ -114,7 +162,6 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
-
     /**
      * getWidth method
      *
@@ -123,7 +170,10 @@ public class Game implements Runnable {
     public int getWidth() {
         return width;
     }
-
+    /**
+     * initBlocks method
+     * inits the blocks position and size on the game
+     */
     public void initBlocks() {
         bars = new ArrayList<Bar>();
         for (int i = 0; i < 40; i++) {
@@ -133,7 +183,6 @@ public class Game implements Runnable {
         }
         this.enemies = bars.size();
     }
-
     /**
      * inits the game with the display and player
      */
@@ -142,10 +191,10 @@ public class Game implements Runnable {
         Assets.init();
         player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
         bullet = new Bullet(player.getX() + 70, player.getY() - 80, 64, 64, this);
+        //inits blocks
         initBlocks();
         display.getJframe().addKeyListener(keyManager);
     }
-
     /**
      * run method
      */
@@ -158,7 +207,6 @@ public class Game implements Runnable {
         long now;
         long lastTime = System.nanoTime();
         while (running) {
-            //Metodo estatico
             now = System.nanoTime();
             delta += (now - lastTime) / timeTick;
             lastTime = now;
@@ -171,7 +219,6 @@ public class Game implements Runnable {
         }
         stop();
     }
-
     /**
      * getKeyManager method
      *
@@ -188,9 +235,10 @@ public class Game implements Runnable {
         keyManager.tick();
         //Gamestart
         if (!isGameStart()) {
-            //1 to start game
+            //if space is clicked it starts the game
             if (getKeyManager().space) {
                 setGameStart(true);
+                //or you can load the game by clickin L
             } else if (getKeyManager().load) {
                 //setGameStart(true);
                 //load game
@@ -208,7 +256,7 @@ public class Game implements Runnable {
                     // Always wrap FileReader in BufferedReader.
                     BufferedReader bufferedReader
                             = new BufferedReader(fileReader);
-
+                    //reads everything from the file
                     setScore(Integer.parseInt(bufferedReader.readLine()));
                     player.setLives(Integer.parseInt(bufferedReader.readLine()));
                     player.setX(Integer.parseInt(bufferedReader.readLine()));
@@ -237,14 +285,12 @@ public class Game implements Runnable {
                     System.out.println(
                             "Error reading file '"
                             + fileName + "'");
-                    // Or we could just do this: 
-                    // ex.printStackTrace();
                 }
-                System.out.println("Load");
             }
         }
-        //Save
+        //When you click S you save the current instance of the game
         if (getKeyManager().save && !isGameOver() && isGameStart()) {
+            //counter used to avoid multiple clicks
             int count = 0;
             if (count == 0) {
                 count++;
@@ -259,10 +305,8 @@ public class Game implements Runnable {
                     // Always wrap FileWriter in BufferedWriter.
                     BufferedWriter bufferedWriter
                             = new BufferedWriter(fileWriter);
-                    /**
-                     * NEEDS TO SAVE SCORE LIVES POSITION AND BLOCKS POSITION
-                     */
-                    // saves score
+                    
+                    // saves everything on the textfile
                     bufferedWriter.write(Integer.toString(getScore()) + '\n');
                     bufferedWriter.write(Integer.toString(player.getLives()) + '\n');
                     bufferedWriter.write(Integer.toString(player.getX()) + '\n');
@@ -288,38 +332,36 @@ public class Game implements Runnable {
                     System.out.println(
                             "Error writing to file '"
                             + fileName + "'");
-                    // Or we could just do this:
-                    // ex.printStackTrace();
                 }
             }
         }
 
-        //Game
+        //Game instance itself
         if (!isGameOver() && isGameStart() && !isWon()) {
-            //System.out.println(paused);
-            //Pierde la bola
+            //Bullet is dead
             if (bullet.isDead()) {
-                //Setea la bola en la posicion inicial
+                //sets the bullet on the initial position and decreases a life
                 player.decreasePlayerLive();
                 if (player.getLives() <= 0) {
+                    //if lives <= 0 then bye bye
                     setGameOver(true);
                 }
                 bullet = new Bullet(player.getX() + 70, player.getY() - 80, 64, 64, this);
                 //setDeath false
                 bullet.setDead(false);
             }
-            //Intersecta con el jugador
+            //Intersection between bullet and player
             if (bullet.intersectaJugador(player)) {
                 bullet.changeBulletByPlayerDirection();
                 bullet.setHit(false);
             }
-            //Intersecta la ball con las barritas
+            //Intersect between bullet and blocks
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     if (bullet.intersectaBarra(bars.get(i))) {
                         //Kill the bar
                         this.enemies--;
-                        if(this.enemies <= 0){
+                        if (this.enemies <= 0) {
                             setWon(true);
                         }
                         if (!bullet.isHit()) {
@@ -330,21 +372,18 @@ public class Game implements Runnable {
                                 bars.get(i).setDead(true);
                                 bars.remove(i);
                             }
-                            System.out.println("Bar" + i + " " + bars.get(i).getHealth());
-                            /*if(bars.get(i).getHealth() <= 0){
-                                    bars.remove(i);
-                                } else {
-                                    bars.get(i).setHealth(bars.get(i).getHealth() - 1);
-                                }*/
+                            //System.out.println("Bar" + i + " " + bars.get(i).getHealth());
                             bullet.changeDirection();
                         }
                     }
                 }
             }
+            //if is not paused game runs normally
             if (!isPaused()) {
                 player.tick();
                 bullet.tick();
             }
+            //if game is over and you hit enter then it resets the game
         } else if (getKeyManager().enter) {
             //init everything
             setGameOver(false);
@@ -358,9 +397,9 @@ public class Game implements Runnable {
         }
 
     }
-
     /**
      * render method
+     * where all the magic happens
      */
     private void render() {
         bs = display.getCanvas().getBufferStrategy();
@@ -376,8 +415,7 @@ public class Game implements Runnable {
             g.drawString("Lives: " + player.getLives(), getWidth() - 80, getHeight() - 10);
             player.render(g);
             bullet.render(g);
-          
-
+            //renders the blocks
             for (int i = 0; i < 40; i++) {
                 for (int j = 0; j < 4; j++) {
                     if (!bars.get(i).isDead()) {
@@ -385,13 +423,15 @@ public class Game implements Runnable {
                     }
                 }
             }
+            //if the game hasnt started it displays the howto
             if (!isGameStart()) {
                 g.drawImage(Assets.howto, 0, 0, getWidth(), getHeight(), null);
             }
+            //if player won it displays the won image
             if (isWon()) {
-                bars.remove(g);
-                 g.drawImage(Assets.won, 0, 0, getWidth(), getHeight(), null);
+                g.drawImage(Assets.won, 0, 0, getWidth(), getHeight(), null);
             }
+            //if player loses all his lives then gameover
             if (isGameOver()) {
                 bars.remove(g);
                 g.drawImage(Assets.gameover, 0, 0, getWidth(), getHeight(), null);
@@ -400,7 +440,6 @@ public class Game implements Runnable {
             g.dispose();
         }
     }
-
     /**
      * start method
      */
@@ -411,7 +450,6 @@ public class Game implements Runnable {
             thread.start();
         }
     }
-
     /**
      * stop method
      */
