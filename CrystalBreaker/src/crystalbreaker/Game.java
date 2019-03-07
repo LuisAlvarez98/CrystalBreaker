@@ -371,10 +371,7 @@ public class Game implements Runnable {
                 for (int j = 0; j < 4; j++) {
                     if (bullet.intersectaBarra(bars.get(i))) {
                         //Kill the bar
-                        this.enemies--;
-                        if (this.enemies <= 0) {
-                            setWon(true);
-                        }
+                     
                         if (!bullet.isHit()) {
                             increaseScore();
                             bullet.setHit(true);
@@ -391,6 +388,10 @@ public class Game implements Runnable {
                             }
                             //System.out.println("Bar" + i + " " + bars.get(i).getHealth());
                             bullet.changeDirection();
+                        }
+                           this.enemies--;
+                        if (this.enemies <= 0 || bars.size() <= 0) {
+                            setWon(true);
                         }
                     }
                 }
