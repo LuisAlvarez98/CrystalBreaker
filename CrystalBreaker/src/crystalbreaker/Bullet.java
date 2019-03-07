@@ -39,8 +39,8 @@ public class Bullet extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        speedY = -5;
-        speedX = 5;
+        speedY = -6;
+        speedX = 6;
         shoot = false;
         direction = (int) (Math.random() * 10 + 2);
     }
@@ -248,7 +248,7 @@ public class Bullet extends Item {
 
     public void render(Graphics g) {
         if(isHit()) {
-            int count = 1800;
+            int count = 1000;
             while(count >=0){
                 g.drawImage(Assets.bullet_destroyed, getX(), getY(), getWidth(), getHeight(), null);
                 count -= 1;

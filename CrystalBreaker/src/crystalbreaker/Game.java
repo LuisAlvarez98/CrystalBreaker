@@ -140,6 +140,7 @@ public class Game implements Runnable {
     public void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
+        Assets.intro.play();
         player = new Player(getWidth() / 2 - 150, getHeight() - 200, 1, 200, 200, this, 3);
         bullet = new Bullet(player.getX() + 70, player.getY() - 80, 64, 64, this);
         initBlocks();
@@ -326,6 +327,7 @@ public class Game implements Runnable {
                             increaseScore();
                             bullet.setHit(true);
                             bars.get(i).setHealth(bars.get(i).getHealth() - 1);
+                            Assets.explosion.play();
                             if (bars.get(i).getHealth() <= 0) {
                                 bars.get(i).setDead(true);
                                 bars.remove(i);
