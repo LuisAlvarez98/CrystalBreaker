@@ -354,6 +354,11 @@ public class Game implements Runnable {
 
         //Game instance itself
         if (!isGameOver() && isGameStart() && !isWon()) {
+             if (getKeyManager().pause) {
+                getKeyManager().setKeyDown();
+                paused = !paused;
+            }
+            if (!paused) {
             //Bullet is dead
             if (bullet.isDead()) {
                 //sets the bullet on the initial position and decreases a life
@@ -403,11 +408,6 @@ public class Game implements Runnable {
                 }
             }
             //if is not paused game runs normally
-            if(getKeyManager().pause) {
-                setPaused();
-            }
-            if (!isPaused()) {
-                
                 player.tick();
                 bullet.tick();
                 for (int i = 0; i < powerups.size(); i++) {
